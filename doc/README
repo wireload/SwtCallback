@@ -1,0 +1,73 @@
+== Build Instructions ==
+
+You need to have an appropriate SWT.jar file in lib/. Then just use the included ant 
+script to compile the jar file.
+
+== Usage Instructions ==
+
+Put SwtCallback.jar in the class path of your program. See Demo.java for an example of usage.
+
+== Changelog ==
+
+Version 0.2 (June 10th, 2007)
+- Callbacks can now be used in lieu of Runnable anonymous methods. For example, maybe you wish to 
+refresh some UI components to reflect a change in data. But you're not on the SWT thread so you 
+have to use syncExec. Normally, you'd do something like,
+
+display.syncExec(new Runnable() {
+  public void run() {
+    doUpdateSwtLabels();
+  }
+});    
+
+With a Callback you can turn this into one highly readable line:
+
+display.syncExec(new Callback(this, "doUpdateSwtLabels"));
+
+The most useful application may be for timers. In SWT, a timer needs to be reestablished at the end of 
+timer execution if you wish it to recur. You may end up with unwieldy code such as,
+
+void initWidgets() {
+  /* ... */
+
+  // Prime the timer.
+  display.timerExec(INITIAL_DELAY, new Runnable() {
+    public void run() {
+      refresh();
+    }
+  }); 
+}
+
+void refresh() {
+  /* ... update stuff ... */
+  
+  // Set the timer again.
+  display.timerExec(TIMER_DELAY, new Runnable() {
+    public void run() {
+      refresh();
+    }
+  }); 
+}
+
+With a Callback you can now do this:
+
+void initWidgets() {
+  /* ... */
+
+  // Prime the timer.
+  display.timerExec(INITIAL_DELAY, new Callback(this, "refresh")); 
+}
+
+void refresh() {
+  /* ... update stuff ... */
+  
+  // Set the timer again.
+  display.timerExec(TIMER_DELAY, new Callback(this, "refresh")); 
+}
+
+This is much easier to read and follow.
+
+- Improved Java documentation.
+
+Version 0.1 (May 30th, 2007)
+Initial release version.

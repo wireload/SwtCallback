@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="SwtCallback" default="jar" basedir=".">
+	<property name="src" location="src"/>
+	<property name="bin" location="bin"/>
+	<property name="build" location="build"/>
+	<property name="lib" location="lib"/>
+	<property name="res" location="res"/>
+	<property name="dist" location="dist"/>
+	<property name="version" value="0.3"/>
+
+	<property name="jarfile" location="${dist}/SwtCallback.jar"/>
+	
+	<fileset id="lib.jars" dir="${lib}">
+		<include name="**/*.jar"/>
+	</fileset>
+
+	<path id="lib.path">
+		<fileset refid="lib.jars"/>
+	</path>
+
+	<target name="compile" description="Compile code">
+		<mkdir dir="${bin}"/>
+		<mkdir dir="${lib}"/>
+		<javac srcdir="${src}" destdir="${bin}" includeAntRuntime="no"
+            classpathref="lib.path" source="1.5" excludes="**/*Test.java">
+		</javac>
+	</target>
+	
+	<target name="jar" depends="compile" 
+			description="Build SwtCallback jar">
+		<mkdir dir="${dist}"/>
+		<mkdir dir="${dist}/lib"/>
+		<jar jarfile="${jarfile}" compress="no" basedir="${bin}"
+			excludes="**/*Test.class">
+			<fileset dir="${res}" />
+		</jar>
+	</target>
+
+	<target name="binsrc-release" depends="clean, jar"
+		description="Build the binary and source release.">
+
+		<copy todir="${dist}/src">
+			<fileset dir="${src}" />
+		</copy>
+		<copy todir="${dist}/doc">
+			<fileset dir="doc" />
+		</copy>
+		<copy todir="${dist}/">
+			<fileset file="build.xml" />
+		</copy>
+		<tar longfile="gnu" destfile="${dist}/swtcallback-${version}.tar">
+		  <tarfileset dir="${dist}" mode="755" prefix="swtcallback-${version}"/>
+		</tar>
+		<gzip src="${dist}/swtcallback-${version}.tar" destfile="${dist}/swtcallback-${version}.tar.gz"/>			
+	</target>
+	
+	<target name="clean" description="Remove build and dist directories">
+		<delete dir="${bin}"/>
+		<delete dir="${dist}"/>
+		<delete dir="${build}"/>
+	</target>
+</project>
