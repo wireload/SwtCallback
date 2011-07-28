@@ -9,7 +9,7 @@ import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Widget;
 
 /*
- * Copyright (c) 2007 WireLoad, LLC 
+ * Copyright (c) 2007 WireLoad Inc. 
  * 
  * All rights reserved.
  * 
@@ -20,7 +20,7 @@ import org.eclipse.swt.widgets.Widget;
  * list of conditions and the following disclaimer. Redistributions in binary
  * form must reproduce the above copyright notice, this list of conditions and
  * the following disclaimer in the documentation and/or other materials provided
- * with the distribution. Neither the name of WireLoad, LLC nor the names
+ * with the distribution. Neither the name of WireLoad Inc. nor the names
  * of its contributors may be used to endorse or promote products derived from
  * this software without specific prior written permission. 
  * 
