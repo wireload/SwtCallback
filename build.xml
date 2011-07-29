@@ -6,10 +6,10 @@
 	<property name="lib" location="lib"/>
 	<property name="res" location="res"/>
 	<property name="dist" location="dist"/>
-	<property name="version" value="0.3"/>
+	<property name="version" value="0.4"/>
 
-	<property name="jarfile" location="${dist}/SwtCallback.jar"/>
-	
+	<property name="jarfile" location="${dist}/lib/SwtCallback.jar"/>
+
 	<fileset id="lib.jars" dir="${lib}">
 		<include name="**/*.jar"/>
 	</fileset>
@@ -20,19 +20,16 @@
 
 	<target name="compile" description="Compile code">
 		<mkdir dir="${bin}"/>
-		<mkdir dir="${lib}"/>
 		<javac srcdir="${src}" destdir="${bin}" includeAntRuntime="no"
             classpathref="lib.path" source="1.5" excludes="**/*Test.java">
 		</javac>
 	</target>
-	
-	<target name="jar" depends="compile" 
+
+	<target name="jar" depends="compile"
 			description="Build SwtCallback jar">
 		<mkdir dir="${dist}"/>
 		<mkdir dir="${dist}/lib"/>
-		<jar jarfile="${jarfile}" compress="no" basedir="${bin}"
-			excludes="**/*Test.class">
-			<fileset dir="${res}" />
+		<jar jarfile="${jarfile}" compress="no" basedir="${bin}" excludes="**/*Test.class">
 		</jar>
 	</target>
 
@@ -42,8 +39,8 @@
 		<copy todir="${dist}/src">
 			<fileset dir="${src}" />
 		</copy>
-		<copy todir="${dist}/doc">
-			<fileset dir="doc" />
+		<copy todir="${dist}/">
+			<fileset file="README.md" />
 		</copy>
 		<copy todir="${dist}/">
 			<fileset file="build.xml" />
@@ -51,9 +48,9 @@
 		<tar longfile="gnu" destfile="${dist}/swtcallback-${version}.tar">
 		  <tarfileset dir="${dist}" mode="755" prefix="swtcallback-${version}"/>
 		</tar>
-		<gzip src="${dist}/swtcallback-${version}.tar" destfile="${dist}/swtcallback-${version}.tar.gz"/>			
+		<gzip src="${dist}/swtcallback-${version}.tar" destfile="${dist}/swtcallback-${version}.tar.gz"/>
 	</target>
-	
+
 	<target name="clean" description="Remove build and dist directories">
 		<delete dir="${bin}"/>
 		<delete dir="${dist}"/>
