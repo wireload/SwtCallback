@@ -17,67 +17,67 @@ public class CallbackTest extends TestCase {
 		Button eventButton;
 		boolean superCalled = false;
 		boolean childCalled = false;
-		
+
 		MySuperclass() {
 			Shell testShell = new Shell();
 			eventButton = new Button(testShell, SWT.NONE);
 			Callback.add(eventButton, SWT.Selection, this, "callbackTestEventClicked");
 		}
-		
+
 		void callbackTestEventClicked() {
 			superCalled = true;
 		}
 	}
-	
+
 	private class MySubclass extends MySuperclass {
 		MySubclass() {
 			super();
 		}
-		
+
 		void callbackTestEventClicked() {
 			childCalled = true;
 		}
 	}
 
-	
+
 	/**
-	 * This test just makes sure normal SWT events work fine.
+	 * This test makes sure that the testing environment is sane.
 	 */
 	public final void testNormalListener() {
 		Shell testShell = new Shell();
 		Button eventButton = new Button(testShell, SWT.NONE);
-		
+
 		gotEvent = false;
 
 		eventButton.notifyListeners(SWT.Selection, new Event());
 		assertFalse(gotEvent);
-		
+
 		Listener directListener = new Listener() {
 		    public void handleEvent(Event event) {
 		        gotEvent = true;
 		    }
 		};
-		
+
 		eventButton.addListener(SWT.Selection, directListener);
 		eventButton.notifyListeners(SWT.Selection, new Event());
 		assertTrue(gotEvent);
-		
+
 		eventButton.removeListener(SWT.Selection, directListener);
 		gotEvent = false;
 		eventButton.notifyListeners(SWT.Selection, new Event());
 		assertFalse(gotEvent);
 	}
 
-	
+
 	/**
-	 * This test just makes sure that if a super class registers
+	 * This test makes sure that if a super class registers
 	 * a listener and a subclass overrides the listener method,
 	 * the subclass listener gets called for subclass instances.
 	 */
 	public final void testSubclassListener() {
 		MySuperclass a = new MySuperclass();
 		MySubclass b = new MySubclass();
-		
+
 		assertFalse(a.superCalled);
 		assertFalse(a.childCalled);
 		assertFalse(b.superCalled);
@@ -91,19 +91,19 @@ public class CallbackTest extends TestCase {
 		assertTrue(a.superCalled);
 		assertFalse(a.childCalled);
 	}
-	
+
 	/**
 	 * Test method for {@link net.wireload.Callback(...)}.
 	 */
 	public final void testCallback() {
 		Shell testShell = new Shell();
 		Button eventButton = new Button(testShell, SWT.NONE);
-		
+
 		gotEvent = false;
-		
+
 		eventButton.notifyListeners(SWT.Selection, new Event());
 		assertFalse(gotEvent);
-		
+
 		eventButton.addListener(SWT.Selection, new Callback(this, "callbackTestEventClicked"));
 		assertFalse(gotEvent);
 
@@ -111,37 +111,37 @@ public class CallbackTest extends TestCase {
 		assertTrue(gotEvent);
 
 	}
-	
+
 	/**
 	 * Test method for {@link net.wireload.Callback.add(...)}.
 	 */
 	public final void testShortCallback() {
 		Shell testShell = new Shell();
 		Button eventButton = new Button(testShell, SWT.NONE);
-		
+
 		gotEvent = false;
-		
+
 		eventButton.notifyListeners(SWT.Selection, new Event());
 		assertFalse(gotEvent);
-		
+
 		Callback.add(eventButton, SWT.Selection, this, "callbackTestEventClicked");
 		assertFalse(gotEvent);
 
 		eventButton.notifyListeners(SWT.Selection, new Event());
 		assertTrue(gotEvent);
 	}
-	
+
 	/**
 	 * Test method for {@link net.wireload.Callback(...)}.
 	 */
 	public final void testRunnableCallback() {
 		// Test Callback as a Runnable.
 		gotRun = false;
-		
+
 		Callback runner = new Callback(this, "callbackRunnableExecuted");
-		// Make sure just instantiating the callback doesn't cause method execution.
+		// Make sure that merely instantiating the callback doesn't cause method execution.
 		assertFalse(gotRun);
-		
+
 		Display.getDefault().syncExec(runner);
 		assertTrue(gotRun);
 	}
@@ -153,7 +153,7 @@ public class CallbackTest extends TestCase {
 	private void callbackTestEventClicked() {
 		gotEvent = true;
 	}
-	
+
 	/**
 	 * Test callback method.
 	 */

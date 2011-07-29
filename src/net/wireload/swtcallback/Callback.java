@@ -9,21 +9,21 @@ import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Widget;
 
 /*
- * Copyright (c) 2007 WireLoad Inc. 
- * 
+ * Copyright (c) 2007 WireLoad Inc.
+ *
  * All rights reserved.
- * 
+ *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
+ *
  * Redistributions of source code must retain the above copyright notice, this
  * list of conditions and the following disclaimer. Redistributions in binary
  * form must reproduce the above copyright notice, this list of conditions and
  * the following disclaimer in the documentation and/or other materials provided
  * with the distribution. Neither the name of WireLoad Inc. nor the names
  * of its contributors may be used to endorse or promote products derived from
- * this software without specific prior written permission. 
- * 
+ * this software without specific prior written permission.
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -41,23 +41,23 @@ import org.eclipse.swt.widgets.Widget;
  * A Callback instance calls a specified method of a specified object when a
  * particular event occurs. It can be used as an SWT Listener, or as a Runnable.
  * When used as an SWT event handler, a Callback may be used as follows:
- * 
+ *
  * <pre><code>
  * Button eventButton = new Button(myShell, SWT.NONE);
  * eventButton.addSelectionListener(new Callback(this, "doEventButtonClicked"));
  * </code></pre>
- * 
+ *
  * When used as a runnable, a Callback may be used for anything that takes a
  * Runnable argument when you actually would much rather specify a method. This
  * may be used both in SWT and elsewhere. The following example is for a timer
  * in SWT:
- * 
+ *
  * <pre><code>
- * display.timerExec(200, new Callback(this, "refresh")); 
+ * display.timerExec(200, new Callback(this, "refresh"));
  * </code></pre>
- * 
+ *
  * The use as an event handler is inspired by Buoy by Peter Eastman.
- * 
+ *
  * @author Alexander Ljungberg
  * @version 0.3
  */
@@ -82,7 +82,7 @@ public class Callback implements Listener, Runnable {
 	/**
 	 * Define a new callback listener. The callback listener will call the named
 	 * method of the given object instance whenever it receives an event.
-	 * 
+	 *
 	 * @param callbackInstance
 	 *            the object which should have the method called
 	 * @param methodName
@@ -100,23 +100,18 @@ public class Callback implements Listener, Runnable {
 
 		// Search the class and its super classes for the given method.
 		Class targetClass = target.getClass();
-		while(targetClass != null) {
+		while (targetClass != null) {
 			for (Method methodCandidate : targetClass.getDeclaredMethods()) {
 				if (methodCandidate.getName().equals(methodName)) {
 					callbackMethod = methodCandidate;
 
 					Class parameters[] = methodCandidate.getParameterTypes();
 
-					if (parameters.length > 0
-							&& parameters[0].isAssignableFrom(Event.class)) {
-						eventArgument = true;
-					} else {
-						eventArgument = false;
-					}
+					eventArgument = (parameters.length > 0 && parameters[0].isAssignableFrom(Event.class));
 					return;
 				}
 			}
-			
+
 			// Nothing here. Lets check the super class, if any.
 			targetClass = targetClass.getSuperclass();
 		}
@@ -133,16 +128,16 @@ public class Callback implements Listener, Runnable {
 	 * widget. Notice that this callback can never be removed. It will be
 	 * garbage collected as normal when the widget is disposed off.
 	 * </p>
-	 * 
+	 *
 	 * <p>
 	 * Example usage:
 	 * </p>
-	 * 
+	 *
 	 * <pre><code>
 	 * Button eventButton = new Button(myShell, SWT.NONE);
 	 * Callback.add(eventButton, SWT.Selection, this, &quot;myCallback&quot;);
 	 * </code></pre>
-	 * 
+	 *
 	 * @param widget
 	 *            the widget to add a callback event handler for
 	 * @param event
@@ -196,9 +191,8 @@ public class Callback implements Listener, Runnable {
 					+ target.getClass().getName() + "."
 					+ callbackMethod.getName() + ".): " + e);
 		} finally {
-			if (overrideAccess) {
+			if (overrideAccess)
 				callbackMethod.setAccessible(false);
-			}
 		}
 	}
 
@@ -239,14 +233,13 @@ public class Callback implements Listener, Runnable {
 					+ target.getClass().getName() + "."
 					+ callbackMethod.getName() + ".): " + e);
 		} finally {
-			if (overrideAccess) {
+			if (overrideAccess)
 				callbackMethod.setAccessible(false);
-			}
 		}
 	}
 
 	@Override
 	public String toString() {
-		return "[Callback "+target.getClass().getName() + "." + callbackMethod.getName() + "]";
+		return "[Callback " + target.getClass().getName() + "." + callbackMethod.getName() + "]";
 	}
 }
