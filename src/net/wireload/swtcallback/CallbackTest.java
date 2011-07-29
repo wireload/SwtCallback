@@ -24,6 +24,7 @@ public class CallbackTest extends TestCase {
 			Callback.add(eventButton, SWT.Selection, this, "callbackTestEventClicked");
 		}
 
+		@SuppressWarnings("unused")
 		void callbackTestEventClicked() {
 			superCalled = true;
 		}
@@ -34,6 +35,7 @@ public class CallbackTest extends TestCase {
 			super();
 		}
 
+		@Override
 		void callbackTestEventClicked() {
 			childCalled = true;
 		}
